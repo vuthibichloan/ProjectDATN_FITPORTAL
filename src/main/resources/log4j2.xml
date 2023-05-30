@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="error">
+    
+    <Appenders>
+        <Console name="LogToConsole" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%-5level] %d{dd-MM-yyyy HH:mm:ss} [%t] %c{1} - %msg%n"/>
+        </Console>
+        <RollingFile  name="LogFile"  
+        fileName="filelogs/applog.log"
+        filePattern="filelogs/applog-%d{dd-MM-yyyy}.log">
+            <PatternLayout pattern="[%-5level] %d{dd-MM-yyyy HH:mm:ss} [%t] %c{1} - %msg%n"/>
+            <Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true" />
+				<SizeBasedTriggeringPolicy size="10MB" />
+			</Policies>
+			<!-- Max 10 files will be created everyday -->
+			<DefaultRolloverStrategy max="10">
+				<Delete basePath="${basePathr}" maxDepth="10">
+					<!-- Delete all files older than 30 days -->
+					<IfLastModified age="30d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+        </RollingFile >
+    </Appenders>
+    <Loggers>
+        <Logger name="ProjectDATN" level="debug" additivity="false">
+            <AppenderRef ref="LogFile"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Root  level="info">
+            <AppenderRef ref="LogFile"/>
+            <AppenderRef ref="LogToConsole"/>
+        </Root>
+    </Loggers>
+</Configuration>
